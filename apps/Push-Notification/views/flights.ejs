@@ -1,0 +1,62 @@
+<% include globals/head %>
+	<link rel="stylesheet" href="/css/flight-status.css" />
+	<link rel="stylesheet" href="/css/jquery-ui-1.10.3.custom.min.css" />
+		
+	<div class="row custom-nav">
+		<img src="/img/flight-status-bg.png" alt="">
+	</div>
+
+	<!--section class="row">
+		<h1>Sign up for flight notifications</h1>
+		<p>Please enter the details for the JetBlue flight you want to get notifications about and your contact information below to receive email, SMS and/or voicemail alerts for the following events:</p>
+		<ul>
+			<li>Departures</li>
+			<li>Arrivals</li>
+			<li>Gate changes</li>
+			<li>Cancellations</li>
+			<li>Delays</li>
+			<li>Diversions</li>
+		</ul>
+		<p>Note that flight status notification is available for JetBlue flights only. For those customers traveling on through flights, please consult the free JetBlue mobile application for flight status updates and push notifications.
+		Unsubscribe
+		</p>
+		<p>If you no longer wish to receive notifications for a flight, click here to unsubscribe</p>
+	</section-->
+
+	<section class="row sign-up-form">
+		<form action="">
+			<h3>Sign up for flight notifications on your browser</h3>
+			<!-- <h3>Flight Information</h3> -->
+
+			<input type="text" name="flight_number" id="flight_number" placeholder="Jetblue Flight Number">
+			<input type="text" name="flight_date" id="flight_date" placeholder="Flight Date">
+
+			<!-- <h3>Select delivery method(s)</h3>
+			
+			<input type="text" name="email" placeholder="E-mail">
+			<input type="text" name="phone_number" placeholder="Phone Number">
+			<label for="voice">Voice
+				<input type="checkbox" name="voice">
+			</label>
+			<label for="sms">SMS
+				<input type="checkbox" name="text">
+			</label>
+
+			<label for="browser" id="browser_notifications">
+				<input type="checkbox" name="browser"> Receive flight status notifications on your browser. 
+			</label> -->
+
+			<input type="button" id="submit_notifications" value="Subscribe">
+		</form>
+
+	</section>
+
+	<section class="row flight-subscriptions">
+		<h3>You current subscriptions</h3>
+		<img src="/img/ajax-loader.gif" id="subscriptions_loader" class="loader">
+		<ul id="flights_subscribed_to"></ul>
+
+	</section>
+
+	<script src="/js/flights.js" defer></script>
+<% include globals/foot %>

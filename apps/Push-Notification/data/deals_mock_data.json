@@ -1,0 +1,205 @@
+[{
+    "IsNewService": false,
+    "NewServiceDate": "2013-11-12T12:00:00",
+    "Origin": {
+        "AirportCode": "SJU",
+        "CityName": "San Juan",
+        "StateCode": "PR",
+        "DefaultDisplayName": "San Juan, PR (SJU)",
+        "Region": "US"
+    },
+   "Destination": { "AirportCode": "BOS", "CityName": "Boston", "StateCode": "MA", "DefaultDisplayName": "Boston, MA (BOS)",	"Region": "US" },
+    "Fare": {
+        "FareType": "LOWEST/PRICE",
+        "FareAmount": 106.9,
+        "TaxAmount": 17.6,
+        "IsHotDeal": false,
+        "IsPriceDrop": false,
+        "Score": 636.8,
+        "FirstDayOfAvailability": "2013-11-19T18:10:00",
+        "FareRule": {
+            "MaxPurchaseDate": "2013-11-12",
+            "DaysofWeek": [
+                "Tuesday",
+                "Wednesday"
+            ],
+            "FirstTravelDate": "2013-11-12",
+            "LastTravelDate": "2013-11-12",
+            "BlackoutDates": [
+                "2013-11-12",
+                "2013-11-13"
+            ],
+            "MinimalDayAdvancePurchase": 5
+        }
+    }
+},{
+    "IsNewService": false,
+    "NewServiceDate": "2013-11-12T12:00:00",
+    "Origin": {
+        "AirportCode": "SJU",
+        "CityName": "San Juan",
+        "StateCode": "PR",
+        "DefaultDisplayName": "San Juan, PR (SJU)",
+        "Region": "US"
+    },
+   "Destination": { "AirportCode": "BOS", "CityName": "Boston", "StateCode": "MA", "DefaultDisplayName": "Boston, MA (BOS)",    "Region": "US" },
+    "Fare": {
+        "FareType": "LOWEST/PRICE",
+        "FareAmount": 106.9,
+        "TaxAmount": 17.6,
+        "IsHotDeal": false,
+        "IsPriceDrop": false,
+        "Score": 636.8,
+        "FirstDayOfAvailability": "2013-11-19T18:10:00",
+        "FareRule": {
+            "MaxPurchaseDate": "2013-11-12",
+            "DaysofWeek": [
+                "Tuesday",
+                "Wednesday"
+            ],
+            "FirstTravelDate": "2013-11-12",
+            "LastTravelDate": "2013-11-12",
+            "BlackoutDates": [
+                "2013-11-12",
+                "2013-11-13"
+            ],
+            "MinimalDayAdvancePurchase": 5
+        }
+    }
+},{
+    "IsNewService": false,
+    "NewServiceDate": "2013-11-12T12:00:00",
+    "Origin": {
+        "AirportCode": "SJU",
+        "CityName": "San Juan",
+        "StateCode": "PR",
+        "DefaultDisplayName": "San Juan, PR (SJU)",
+        "Region": "US"
+    },
+   "Destination": { "AirportCode": "BOS", "CityName": "Boston", "StateCode": "MA", "DefaultDisplayName": "Boston, MA (BOS)",    "Region": "US" },
+    "Fare": {
+        "FareType": "LOWEST/PRICE",
+        "FareAmount": 106.9,
+        "TaxAmount": 17.6,
+        "IsHotDeal": false,
+        "IsPriceDrop": false,
+        "Score": 636.8,
+        "FirstDayOfAvailability": "2013-11-19T18:10:00",
+        "FareRule": {
+            "MaxPurchaseDate": "2013-11-12",
+            "DaysofWeek": [
+                "Tuesday",
+                "Wednesday"
+            ],
+            "FirstTravelDate": "2013-11-12",
+            "LastTravelDate": "2013-11-12",
+            "BlackoutDates": [
+                "2013-11-12",
+                "2013-11-13"
+            ],
+            "MinimalDayAdvancePurchase": 5
+        }
+    }
+},{
+    "IsNewService": false,
+    "NewServiceDate": "2013-11-12T12:00:00",
+    "Origin": {
+        "AirportCode": "SJU",
+        "CityName": "San Juan",
+        "StateCode": "PR",
+        "DefaultDisplayName": "San Juan, PR (SJU)",
+        "Region": "US"
+    },
+   "Destination": { "AirportCode": "BOS", "CityName": "Boston", "StateCode": "MA", "DefaultDisplayName": "Boston, MA (BOS)",    "Region": "US" },
+    "Fare": {
+        "FareType": "LOWEST/PRICE",
+        "FareAmount": 106.9,
+        "TaxAmount": 17.6,
+        "IsHotDeal": false,
+        "IsPriceDrop": false,
+        "Score": 636.8,
+        "FirstDayOfAvailability": "2013-11-19T18:10:00",
+        "FareRule": {
+            "MaxPurchaseDate": "2013-11-12",
+            "DaysofWeek": [
+                "Tuesday",
+                "Wednesday"
+            ],
+            "FirstTravelDate": "2013-11-12",
+            "LastTravelDate": "2013-11-12",
+            "BlackoutDates": [
+                "2013-11-12",
+                "2013-11-13"
+            ],
+            "MinimalDayAdvancePurchase": 5
+        }
+    }
+},{
+    "IsNewService": false,
+    "NewServiceDate": "2013-11-12T12:00:00",
+    "Origin": {
+        "AirportCode": "SJU",
+        "CityName": "San Juan",
+        "StateCode": "PR",
+        "DefaultDisplayName": "San Juan, PR (SJU)",
+        "Region": "US"
+    },
+   "Destination": { "AirportCode": "BOS", "CityName": "Boston", "StateCode": "MA", "DefaultDisplayName": "Boston, MA (BOS)",    "Region": "US" },
+    "Fare": {
+        "FareType": "LOWEST/PRICE",
+        "FareAmount": 106.9,
+        "TaxAmount": 17.6,
+        "IsHotDeal": false,
+        "IsPriceDrop": false,
+        "Score": 636.8,
+        "FirstDayOfAvailability": "2013-11-19T18:10:00",
+        "FareRule": {
+            "MaxPurchaseDate": "2013-11-12",
+            "DaysofWeek": [
+                "Tuesday",
+                "Wednesday"
+            ],
+            "FirstTravelDate": "2013-11-12",
+            "LastTravelDate": "2013-11-12",
+            "BlackoutDates": [
+                "2013-11-12",
+                "2013-11-13"
+            ],
+            "MinimalDayAdvancePurchase": 5
+        }
+    }
+},{
+    "IsNewService": false,
+    "NewServiceDate": "2013-11-12T12:00:00",
+    "Origin": {
+        "AirportCode": "SJU",
+        "CityName": "San Juan",
+        "StateCode": "PR",
+        "DefaultDisplayName": "San Juan, PR (SJU)",
+        "Region": "US"
+    },
+   "Destination": { "AirportCode": "BOS", "CityName": "Boston", "StateCode": "MA", "DefaultDisplayName": "Boston, MA (BOS)",    "Region": "US" },
+    "Fare": {
+        "FareType": "LOWEST/PRICE",
+        "FareAmount": 106.9,
+        "TaxAmount": 17.6,
+        "IsHotDeal": false,
+        "IsPriceDrop": false,
+        "Score": 636.8,
+        "FirstDayOfAvailability": "2013-11-19T18:10:00",
+        "FareRule": {
+            "MaxPurchaseDate": "2013-11-12",
+            "DaysofWeek": [
+                "Tuesday",
+                "Wednesday"
+            ],
+            "FirstTravelDate": "2013-11-12",
+            "LastTravelDate": "2013-11-12",
+            "BlackoutDates": [
+                "2013-11-12",
+                "2013-11-13"
+            ],
+            "MinimalDayAdvancePurchase": 5
+        }
+    }
+}]

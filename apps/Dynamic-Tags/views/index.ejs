@@ -1,0 +1,443 @@
+<html>
+	<head>
+		<title>JB TAGS</title>
+		<style>
+				.ui-notify {
+					position: absolute;
+					right: 10px;
+					top: 10px;
+					width: 350px;
+					font-family:Gotham, "Helvetica Neue", Helvetica, Arial, sans-serif
+				}
+				.ui-notify-message:last-child {
+					margin-bottom: 0;
+				}
+				.ui-notify-message-style {
+					background: none repeat scroll 0 0 rgba(0, 0, 0, 0.8);
+					box-shadow: 0 0 6px #000000;
+				}
+				.ui-notify-message {
+					border-radius: 8px;
+					margin-bottom: 15px;
+					padding: 10px;
+				}
+				.ui-notify-cross {
+					cursor: pointer;
+					float: right;
+					font-size: 12px;
+					font-weight: bold;
+					margin-top: -4px;
+					padding: 2px;
+					text-decoration: none;
+					text-shadow: 0 1px 1px #FFFFFF;
+				}
+				a.ui-notify-close:hover {
+					color: #FFFFFF;
+					text-decoration: underline;
+				}
+				a.ui-notify-close{
+					color: #FFFFFF;
+				}
+				.ui-notify-message-style h1 {
+					color: #FFFFFF;
+					font-weight: bold;
+				}
+				.ui-notify-message h1 {
+					font-size: 14px;
+					margin: 0;
+					padding: 0;
+				}
+				.ui-notify-message-style p {
+					color: #FFFFFF;
+				}
+				.ui-notify-message p {
+					line-height: 14px;
+					font-size:13px;
+					margin: 3px 0;
+					padding: 0;
+				}
+				#gContainer{
+					display:none;
+					z-index: 3000;
+				}
+		</style>
+		<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+		<script>
+		//debugger	
+		var jbTags ={
+		//Dom elements w/o id's
+			allInputs:null,// All inputs
+			formChildren:null,// All form elements
+			images:null ,// All images
+			links:null,// All links
+			table:null,//All tables
+			imgTags:null,//holds Images collection
+			linkTags:null ,//holds collection of links
+			frmTags:null,//holds collection of form elements
+			tblTags:null,//holds collection of table elements
+			globalStatus:null,
+			objTags:null,
+			results:null,
+			regex:null,
+			od:null,
+			initEventBinders: function(){
+				$(window).bind('unload', function(e){
+					 //$.ajaxSetup({ async : false });
+					globalStatus = this.globalStatus;
+					 if(globalStatus==="post"){
+						jbTags.updateCollection("update");
+					 }
+				});
+
+			},
+			generateIdAndFetchCollection : function(){
+				results = this.results
+				var regexS = /(\/?[^?]*?)\?.*/, // strip off anything with ? and after
+				regex = new RegExp( regexS );
+				results = regex.exec( window.location.href );
+				allInputs = $( ':input:not([id])' );// All inputs
+				formChildren = $( "form > *" );// All form elements
+				$( "#messages" ).text( "Found " + allInputs.length + " inputs and the form has " +formChildren.length + " children." );
+				//if url has no match in regex filter then give us the url as is else parse out and return for us to use as unique id
+				if(results == null){
+				      results = window.location.href;//add the value of location.href to json object as pageId
+				      console.log("Result is NULL: " +results);
+				     }else{
+				         results = results[1];
+				         console.log("THIS IS RESULTS: " +results);
+				     }
+				//this.deleteCollection(results);//delete collection and record document in mongo
+				this.getCollection();//get collection
+				alert("BEEP BEEP!");
+			},
+			getCollection: function(obj){
+				allInputs = $( ':input:not([id])' );
+					images = $('img:not([id])');// All images
+					links = $('a:not([id])');// All links
+					table = $('table:not([id])');//All tables
+					
+					// Always do a node restful endpoint GET first and foremost with key to query mongo for pre-existing record
+					//GET
+					$.ajax({
+						type: "GET",
+						url: "/tags/getTags/tags/"+encodeURIComponent(results),
+						success: function(response){
+							console.log("RESPONSE FROM SERVER:");
+							//put the growl notification
+							$('#gContainer').find('#gHeader').html('FETCHING TAGS COLLECTION FROM SERVER');
+							$('#gContainer').find('#gBlurb').html('URL: http://10.156.74.61/tags/getTags/tags/'+encodeURIComponent(results));
+							$('#gContainer').fadeIn(3000,function(){
+								$(this).fadeOut(1000);
+							});
+							
+							// if collection is empty and no reference in database lets build tag object collection and post else get and populate dom objects
+							if(response.status ==="empty"){
+								jbTags.postCollection();
+								globalStatus = "post";
+							}else{
+								//Get response
+								$(response).each(function(i,collection){
+									
+									//if id matches url then page exists, collect all objects on page and cycle through mongo and populate dom with store id's
+									if(collection._id === results){
+										console.log("THIS PAGE IS ALREADY STORED and tags id is: "+collection._id);
+										
+										//Get all forms element in mongo collection array and compare to those on page, if matches inject id attribute
+										var frmArrCol =collection.frmTags.frmArr;
+										$(frmArrCol).each(function(j,collectionitem){
+											console.log("Mongo Collection form tags type: "+j+" :"+collectionitem.type+" and value is: "+collectionitem.value);
+											
+											$(allInputs).each(function(k,inputitem){
+												
+												if (inputitem.class === collectionitem.meta || inputitem.value === collectionitem.value){// if unique match
+													$(this).attr({'class':'jb_inputs'+k,'id':'jb_inputs'+k});
+												}else{// inject id's for those not unique to update to mongoDb
+													$(this).attr({'class':'jb_inputs'+k,'id':'jb_inputs'+k});			
+												}
+																													
+											});//ends allInput each
+											
+										});//ends frmArrCol each
+										
+										
+										//Get all images element in array and compare to those on page, if matches inject id attribute
+										var imgArrCol = collection.imgTags.imagesArr;
+										$(imgArrCol).each(function(k,collectionitem){
+											console.log("images tags source: "+k+" :"+collectionitem.src);
+											$(images).each(function(m,imgitem){
+												if (imgitem.src === collectionitem.src){ // if unique match 
+													$(this).attr({'class':'jb_images'+m,'id':'jb_images'+m});
+												}else{
+													$(this).attr({'class':'jb_images'+m,'id':'jb_images'+m});
+													}
+											})//ends images each
+										});// ends imgArrCol each
+																
+										//Get all links element in array and compare to those on page, if matches inject id attribute
+										var linkArrCol = collection.linkTags.linksArr;
+										$(linkArrCol).each(function(l,collectionitem){
+											console.log("links tags href: "+l+" :"+collectionitem.href);
+											$(links).each(function(n,linkitem){
+												if(linkitem.data-od !== null){
+													if(linkitem.data-od === collectionitem.data-od){
+														$(this).attr({'class':'jb_links'+n,'id':'jb_links'+n});
+													}
+												}
+												if(inkitem.href=== collectionitem.href || linkitem.class === collectionitem.meta){//if unique match
+													$(this).attr({'class':'jb_links'+n,'id':'jb_links'+n});
+												}else{
+													$(this).attr({'class':'jb_links'+n,'id':'jb_links'+n});
+												}
+											});
+											
+										});//ends linkArrCol each
+										
+									}
+															
+								});//end response each
+								
+								//TODO:build tag object and store use for update
+						  	}
+						}//ends success
+					});//ends $.ajax
+
+			},
+			postCollection: function(status){
+				console.log("++==================== POSTING COLLECTION OBJECT TO NODE===============++");
+					var elUrl,elMethod;
+					if(status==="update"){
+					   elMethod = "PUT";
+						elUrl = "http://10.156.74.61/tags/updateTags/tags/"+encodeURIComponent(results);
+						allInputs = $( ':input[id]' );
+						images = $('img[id]');// All images
+						links = $('a[id]');// All links
+						table = $('table[id]');//All tables
+
+					}else{
+						elMethod = "POST"
+						elUrl = "http://10.156.74.61/tags/postTags/tags";
+						allInputs = $( ':input:not([id])' );
+						images = $('img:not([id])');// All images
+						links = $('a:not([id])');// All links
+						table = $('table:not([id])');//All tables
+					}
+					
+					//put the growl notification
+						$('#gContainer').find('#gHeader').html((status=='update')?'POSTING TAGS TO SERVER':'UPDATING TAGS FROM SERVER');$('#gContainer').find('#gBlurb').html(images.length+" images: "+allInputs.length+" form fields: "+links.length+" anchor tags: "+table.length+" tables");
+						$('#gContainer').fadeIn(3000,function(){
+							$(this).fadeOut(1000);
+						});
+					
+					imgTags = {imagesArr: []};//holds Images collection
+					linkTags = {linksArr: []};//holds collection of links
+					frmTags = {frmArr: []};//holds collection of form elements
+					tblTags ={tblArr:[]};//holds collection of table elements
+				
+					//call inject ids to all created objects arrays, create collection of all and POST to Node and do mongo insert
+					// loop form elements and inject ids
+					allInputs.each(function(index,element){
+					    var type = this.type;//get type
+					    var elClass = this.class; //get class
+						$(this).attr('id',(status==="update")?this.id : type+index);//Add incremental id if POSTING for 1st time else use generated page ID if UPDATING
+						
+						if(!jbTags.hasClassAttribute($(this))){ // if input elements  don't already have class inject new classes
+							$(this).attr('class',type+index);
+						}
+					});
+					
+					//loop images and inject ids
+					images.each(function(index,element){
+						$(this).attr('id',(status==="update")?this.id : "jb_images"+index);
+						//$(this).attr('id',"jb_images"+index);	   
+					});
+							
+					//loop links and inject ids
+					links.each(function(index,element){
+						$(this).attr('id',(status==="update")?this.id : "links"+index);
+						//$(this).attr('id',"links"+index);   
+					});
+								
+					//if tables exists loop tables and inject ids
+					if($(table).length > 0){
+						table.each(function(index,element){
+						    $(this).attr('id',(status==="update")?this.id : "table"+index);
+							 //$(this).attr('id',"table"+index);    
+						});
+					}
+					
+					//Images Array
+					images.each(function(i,val){
+					    var item = images[i];
+					    imgTags.imagesArr.push({ 
+					        "id" : item.id,
+					        "meta" : item.class,
+					        "src" : item.src
+					    });
+					});
+			
+					//links Array
+					links.each(function(j,val){
+					    var item = links[j];
+					    linkTags.linksArr.push({ 
+					        "id" : item.id,
+					        "href"  : item.href,
+					        "meta" : item.class,
+							 "data-od" : $(item).attr('data-od')
+					    });
+					});
+			
+					//Form elements Array
+					allInputs.each(function(k,val){
+					    var item = allInputs[k];
+					    frmTags.frmArr.push({ 
+					        "type": item.type,
+					        "id" : item.id,
+					        "value"  : item.value,
+					        "meta" : item.class,
+					    });
+					});
+			
+					//Build out the collection of objects arrays created and now send to Node to store record
+					var tags ={
+					'_id':results,
+					'imgTags':imgTags,
+					'linkTags':linkTags,
+					'frmTags':frmTags,
+					'tblTags':tblTags
+					};
+									
+					
+					//POST
+					$.ajax({
+						//type: "POST",
+						//url: "/tags/postTags/tags",
+						type:elMethod,
+						url: elUrl,
+						data: tags		
+					});
+
+
+			},
+			updateCollection: function(status){
+				this.postCollection(status);
+			},
+			deleteCollection: function(results){
+				$.ajax({
+						type: "DELETE",
+						url: "/tags/deleteTags/tags/"+encodeURIComponent(results)
+					});
+			},
+			pushArray: function(){
+				//prototyping pushArray for multiple arrays (more than two) instead of default push
+				Array.prototype.pushArray = function() {
+			    	this.push.apply(this, this.concat.apply([], arguments));
+				}
+			},
+			hasOneOrMoreAttributes : function(selector){
+				var hasAttribute = false;
+				    $(selector).each(function(index, element) {
+				        if (element.attributes.length > 0) {
+				            hasAttribute = true;
+				            return false; // breaks out of the each once we find an attribute
+				        }
+				    });
+				    return hasAttribute;
+			},
+			hasClassAttribute: function(el){
+				var hasAttribute = false;
+					$(el).each(function(index, element){
+						if(element.attributes.length> 0){
+						 if($(this).attr('class')!== undefined){
+						 	hasAttribute = true;
+						 	return false;
+						 }
+						}
+					});
+					return hasAttribute;
+			},
+			init: function(){
+				this.generateIdAndFetchCollection();
+				this.initEventBinders();
+			}
+	}//End jbTags encapsulation
+
+$(document).ready(function(){jbTags.init();});
+</script>
+	</head>
+	<body>
+	    <!--Images & Links-->
+	    <div id="jb">
+	        <ul>
+	            <li>
+	                <a href="/plan-a-trip/" class="plan-a-trip" id="jb_link_00">
+	                      <span class="name">Plan a trip</span>
+	                </a>|
+	                <a href="/plan-a-travel/blan-atravel/" class="plan-a-travel">
+	                      <span class="name">Plan a travel</span>
+	                </a> |
+	                <a href="javascript:void(0)" class="plan-a-travel">
+	                      <span class="name">Plan a void</span>
+	                </a> |
+					 <a data-od="AUS,BOS" data-rest="11,21,3901" href="#book-me" class="group"><span data-tb-tx="2.50" class="price"><span data-tb="10300" class="pp">$150</span> to <span class="destination">Boston, MA (BOS)</span></span>
+					</a> |
+					
+					 <a data-od="LGB,AUS" data-rest="11,21,3901" href="#book-me" class="group"><span data-tb-tx="2.50" class="price"><span data-tb="10300" class="pp">$150</span> to <span class="destination">Boston, MA (BOS)</span></span>
+					</a> |
+					<a class="clear-formatting" target="_blank" href="/legal/flights-terms/">Same here
+					</a> |
+					<a class="clear-formatting" target="_blank" href="/legal/flights-terms/">Same here
+					</a>
+
+
+	            </li>
+	            <li>
+	                <img src="https://www.jetblue.com/img/homepage/sidekick/FlyFi.jpg" id="jb_img_00" />
+	            </li>
+	            <li>
+	                <img src="https://www.jetblue.com/img/homepage/sidekick/Getaways2012Logo.JPG" />
+	            </li>
+	            <li>
+	                <img src="https://www.jetblue.com/img/homepage/sidekick/sofly-sidekick.jpg" />
+	            </li>
+	        </ul>
+	    </div>
+	<form>
+	<input type="button" value="Input Button" id="btn_00">
+	<input type="checkbox" name="checkbox" value="sam1">
+	<input type="file" id="file00">
+	<input type="hidden" id="hidden_00">
+	<input type="image">
+	<!--input type="password"-->
+	<input type="radio" value="sam2">
+	<input type="reset" value="Reset">
+	<input type="submit" value="Submit">
+	<input type="text" value="sam3">
+	<select>
+	<option value="sam4">Option</option>
+	</select>
+	<textarea></textarea>
+	<button id="14">Button</button>
+	</form>
+	<div id="messages"></div>
+	
+	 <!--Notification-->
+    <div id="gContainer" class="ui-notify">
+    	<div class="ui-notify-message ui-notify-message-style" style="">
+			<a href="#" class="ui-notify-close ui-notify-cross">x</a>
+			<h1 id="gHeader">Sticky Notification</h1>
+			<p id="gBlurb">JetBlue Tags "sticky" notification.  Click on the X above to close me.</p>
+		</div>
+    </div>
+	<script>
+	var regExp = /localhost:3000/g;
+var jbTagsUrl = window.location.href;
+if(regExp.test(jbTagsUrl)){
+document.write("<link rel='stylesheet' href='jbTags/css/jbTags.css'>");
+document.write("<scr"+"ipt src='jbTags/js/jbtags.js'></sc"+"ript>");
+document.write("<div id='gContainer' class='ui-notify'><div class='ui-notify-message ui-notify-message-style'><a href='#' class='ui-notify-close ui-notify-cross'>x</a><h1 id='gHeader'>Sticky Notification</h1><p id='gBlurb'>JetBlue Tags 'sticky' notification. Click on the X above to close me.</p></div></div>");
+
+}else console.log("DEV");
+</script>	
+	</body>
+</html>
+
