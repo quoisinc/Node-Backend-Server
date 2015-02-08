@@ -3,7 +3,7 @@
  * Module dependencies.
  */
 var M_ADDRESS = process.env.M_ADDRESS || 'localhost'
-  , M_DB = process.env.M_DB || 'jetblue'
+  , M_DB = process.env.M_DB || 'flightapp'
   , M_PORT = process.env.M_PORT || 27017;
 
 //Mongo Instance
